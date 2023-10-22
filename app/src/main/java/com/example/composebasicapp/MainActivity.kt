@@ -1,6 +1,7 @@
 package com.example.composebasicapp
 
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,7 +51,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ComposeBasicAppTheme {
-                // A surface container using the 'background' color from the theme
                 MainBody()
             }
         }
@@ -58,145 +58,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun MainBody() {
-//        Column(
-//            modifier = Modifier.fillMaxWidth()
-//                .fillMaxHeight()
-//                .background(color = Color.Green.copy(alpha = 0.3f) ),
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            verticalArrangement = Arrangement.SpaceEvenly
-//        ) {
-//            Text(
-//                text = "This is my Text",
-//                fontSize = 20.sp,
-//                fontWeight = FontWeight.Bold,
-//                color = Green
-//            )
-//            Button(
-//                modifier = Modifier.width(100.dp),
-//                onClick = {
-//                    Log.d(TAG, "MainBody: buttonClicked")
-//                },
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = Color.Red,
-//                    contentColor = Color.White,
-//                )
-//            ) {
-//                Text(
-//                    text = "Submit",
-//                )
-//            }
-//        }
-
-//        Row(
-//            modifier = Modifier
-//                .background(color = Color.Green.copy(0.5f))
-//                .fillMaxWidth(),
-//            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.SpaceEvenly,
-//
-//        ) {
-//            Button(
-//                modifier = Modifier.width(100.dp),
-//                onClick = {
-//                    Log.d(TAG, "MainBody: buttonClicked")
-//                },
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = Color.Red,
-//                    contentColor = Color.White,
-//                )
-//            ) {
-//                Text(
-//                    text = "Submit",
-//                )
-//            }
-//
-//            Button(
-//                modifier = Modifier.width(100.dp),
-//                onClick = {
-//                    Log.d(TAG, "MainBody: buttonClicked")
-//                },
-//                colors = ButtonDefaults.buttonColors(
-//                    containerColor = Color.Gray,
-//                    contentColor = Color.White,
-//                )
-//            ) {
-//                Text(
-//                    text = "Cancel",
-//                )
-//            }
-//        }
-
-        // Icons Code
-//        Row(
-//            modifier = Modifier
-//                .background(Color.White)
-//                .fillMaxWidth()
-//        ) {
-//            Icon(
-//                modifier = Modifier.clickable {
-//                    Log.d(TAG, "MainBody: person icon clicked")
-//                },
-//                imageVector = Icons.Default.Person,
-//                contentDescription = null,
-//            )
-//            Spacer(modifier = Modifier.width(10.dp))
-//            Icon(
-//                modifier = Modifier
-//                    .size(40.dp)
-//                    .clickable {
-//                        Log.d(TAG, "MainBody: plus icon clicked")
-//                    }
-//,
-//                imageVector = Icons.Default.AddCircle,
-//                contentDescription = null,
-//                tint = Color.Blue
-//                )
-//            Spacer(modifier = Modifier.width(10.dp))
-//            Icon(
-//                modifier = Modifier
-//                    .size(40.dp)
-//                    .clickable {
-//                        Log.d(TAG, "MainBody: reaction icon clicked")
-//                    }
-//                ,
-//                painter = painterResource(id = R.drawable.baseline_add_reaction_24),
-//                contentDescription = null,
-//                tint = Color.Green
-//            )
-//        }
-
-        // Image code
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .background(color = Color.White)
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                painter = painterResource(id = R.drawable.img_1),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                alpha = 0.8f,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Image(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                painter = painterResource(id = R.drawable.img_2),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                alpha =1f,
-            )
-
-        }
-
-
-
-
+        Text("Home Screen")
     }
 
     @Preview
