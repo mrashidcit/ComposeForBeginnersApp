@@ -45,7 +45,9 @@ fun TextFieldDemoScreen() {
     val passwordVisibility = remember {
         mutableStateOf(false)
     }
-
+    val description = remember {
+        mutableStateOf("")
+    }
     Column(modifier = Modifier
         .fillMaxSize()
         .background(color = Color.White)
@@ -60,7 +62,8 @@ fun TextFieldDemoScreen() {
             },
             placeholder = {
                 Text("FirstName")
-            }
+            },
+            singleLine = true,
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -70,12 +73,13 @@ fun TextFieldDemoScreen() {
             onValueChange =  {
                 email.value = it
             },
+            singleLine = true,
             placeholder = {
                 Text("Email Address")
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email
-            )
+            ),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -85,6 +89,7 @@ fun TextFieldDemoScreen() {
             onValueChange = {
                 password.value = it
             },
+            singleLine = true,
             placeholder = {
                 Text("Password")
             },
@@ -109,8 +114,24 @@ fun TextFieldDemoScreen() {
                     ),
                     contentDescription = null,
                 )
-            }
+            },
         )
+
+        Spacer(modifier = Modifier.height(12.dp))
+        // Description Text
+        TextField(
+            modifier = Modifier
+                .height(100.dp),
+            value = description.value,
+            onValueChange = {
+                description.value = it
+            },
+            placeholder = {
+                Text("Enter Description ....")
+            },
+
+        )
+
 
 
 
