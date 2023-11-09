@@ -2,6 +2,7 @@ package com.example.composebasicapp.onBoarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -28,6 +31,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,7 +41,11 @@ import com.example.composebasicapp.ui.theme.ComposeBasicAppTheme
 
 
 @Composable
-fun OnBoardingScreen() {
+fun OnBoardingScreen(
+    viewModel: OnboardingViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -57,24 +65,22 @@ fun OnBoardingScreen() {
                     top = 16.dp,
                 )
                 .graphicsLayer {
-                   alpha = 0.99f
+                    alpha = 0.99f
                 }
                 .drawWithContent {
-                     val colors = listOf(
-                         Color.Transparent,
-                         Color.Transparent,
-                         Color.Transparent,
-                         Color.White
-                     )
+                    val colors = listOf(
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.White
+                    )
                     drawContent()
                     drawRect(
                         brush = Brush.verticalGradient(colors),
                         blendMode = BlendMode.DstOut
                     )
-                }
-
-            ,
-            painter = painterResource(id = R.drawable.img_splash1),
+                },
+            painter = painterResource(id = uiState.getSelectedItem().imageId),
             contentDescription = null
         )
 
@@ -96,18 +102,22 @@ fun OnBoardingScreen() {
             Text(
                 modifier = Modifier
                     .padding(horizontal = 24.dp),
-                text = "Explore Upcoming and Nearby Events",
+                text = uiState.getSelectedItem().title,
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Medium,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "In publishing and graphic design, Lorem is a placeholder text commonly",
+                text = uiState.getSelectedItem().description,
                 color = Color.White,
                 fontSize = 15.sp,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
             )
             Spacer(modifier = Modifier.height(30.dp))
             Row(
@@ -117,14 +127,24 @@ fun OnBoardingScreen() {
             ) {
                 Text(
                     text = "Skip",
-                    color = Color.White.copy(alpha = 0.50f)
+                    color = Color.White.copy(
+                        if (uiState.selectedItem == 0)
+                            0.50f
+                        else
+                            1f
+                    )
                 )
                 Row() {
                     Box(
                         modifier = Modifier
                             .size(8.dp)
                             .background(
-                                color = Color.White,
+                                color = Color.White.copy(
+                                    if (uiState.selectedItem == 0)
+                                        1f
+                                    else
+                                        0.20f
+                                ),
                                 shape = CircleShape,
                             )
                     )
@@ -133,7 +153,12 @@ fun OnBoardingScreen() {
                         modifier = Modifier
                             .size(8.dp)
                             .background(
-                                color = Color.White.copy(0.20f),
+                                color = Color.White.copy(
+                                    if (uiState.selectedItem == 1)
+                                        1f
+                                    else
+                                        0.20f
+                                ),
                                 shape = CircleShape,
                             )
                     )
@@ -142,12 +167,21 @@ fun OnBoardingScreen() {
                         modifier = Modifier
                             .size(8.dp)
                             .background(
-                                color = Color.White.copy(0.20f),
+                                color = Color.White.copy(
+                                    if (uiState.selectedItem == 2)
+                                        1f
+                                    else
+                                        0.20f
+                                ),
                                 shape = CircleShape,
                             )
                     )
                 }
                 Text(
+                    modifier = Modifier
+                        .clickable {
+                            viewModel.moveNext()
+                        },
                     text = "Next",
                     color = Color.White
                 )
