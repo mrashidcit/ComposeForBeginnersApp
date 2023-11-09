@@ -5,14 +5,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.example.composebasicapp.R
 
-//val airbnbCerealFamily = FontFamily(
-//    Font(R.font.airbnb_cereal_app_book, FontWeight.Light),
-////    Font(R.font.firasans_regular, FontWeight.Normal),
-////    Font(R.font.firasans_italic, FontWeight.Normal, FontStyle.Italic),
-////    Font(R.font.firasans_medium, FontWeight.Medium),
-////    Font(R.font.firasans_bold, FontWeight.Bold)
-//)
-
 val airbnbCerealBook = FontFamily(
     Font(R.font.airbnb_cereal_app_book)
 )
@@ -20,8 +12,6 @@ val airbnbCerealBook = FontFamily(
 val airbnbCerealBlack = FontFamily(
     Font(R.font.airbnb_cereal_app_black)
 )
-
-
 
 val airbnbCerealLight = FontFamily(
     Font(R.font.airbnb_cereal_app_light, FontWeight.Light)
@@ -38,10 +28,3 @@ val airbnbCerealBold = FontFamily(
 val airbnbCerealExtraBold = FontFamily(
     Font(R.font.airbnb_cereal_app_extrabold, FontWeight.ExtraBold)
 )
-
-
-
-
-
-
-
