@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +29,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,6 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,17 +56,15 @@ import com.example.composebasicapp.ui.theme.Gray5
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignInScreen() {
+fun SignInScreen(
+    viewModel: SignInViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
 
-    val email = remember {
-        mutableStateOf("")
-    }
-    val password = remember {
-        mutableStateOf("")
-    }
+    val uiState by viewModel.uiState.collectAsState()
 
     Column(
         modifier = Modifier
+            .verticalScroll(rememberScrollState())
             .fillMaxSize()
             .background(color = Color.White)
             .padding(16.dp)
@@ -96,9 +100,9 @@ fun SignInScreen() {
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = email.value,
+                value = uiState.email,
                 onValueChange = {
-                    email.value = it
+                    viewModel.updateEmail(it)
                 },
                 placeholder = {
                     Text("abc@gmail.com")
@@ -124,9 +128,9 @@ fun SignInScreen() {
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = password.value,
+                value = uiState.password,
                 onValueChange = {
-                    password.value = it
+                    viewModel.updatePassword(it)
                 },
                 placeholder = {
                     Text("Your password")
@@ -134,8 +138,7 @@ fun SignInScreen() {
                 leadingIcon = {
                     Icon(
                         modifier = Modifier
-                            .size(22.dp)
-                            .clickable { },
+                            .size(22.dp),
                         painter = painterResource(id = R.drawable.lock_icon),
                         contentDescription = null,
                     )
@@ -144,8 +147,15 @@ fun SignInScreen() {
                     Icon(
                         modifier = Modifier
                             .size(22.dp)
-                            .clickable { },
-                        painter = painterResource(id = R.drawable.visibility_off_icon),
+                            .clickable {
+                                viewModel.updatePasswordVisibility(!uiState.passwordVisibility)
+                            },
+                        painter = painterResource(
+                            if (!uiState.passwordVisibility)
+                                R.drawable.visibility_off_icon
+                            else
+                                R.drawable.baseline_visibility_24
+                        ),
                         contentDescription = null,
                         tint = Gray4
                     )
@@ -155,7 +165,11 @@ fun SignInScreen() {
                     placeholderColor = Gray2,
                     unfocusedLeadingIconColor = Gray3,
                 ),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
+                visualTransformation = if (!uiState.passwordVisibility)
+                    PasswordVisualTransformation()
+                else
+                    VisualTransformation.None
             )
             Spacer(modifier = Modifier.height(12.dp))
             Row(
@@ -164,8 +178,10 @@ fun SignInScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Switch(
-                    checked = true,
-                    onCheckedChange = {},
+                    checked = uiState.rememberMeCheck,
+                    onCheckedChange = {
+                        viewModel.updateRememberMeCheck(it)
+                    },
                     colors = SwitchDefaults.colors(
                         checkedTrackColor = Blue
                     )
@@ -191,7 +207,9 @@ fun SignInScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
                 .height(58.dp),
-            onClick = {},
+            onClick = {
+                viewModel.signInOnClick()
+            },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Blue
             ),
@@ -234,7 +252,9 @@ fun SignInScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
                 .height(58.dp),
-            onClick = {},
+            onClick = {
+                viewModel.loginWithGoogleOnClick()
+            },
             colors = ButtonDefaults.buttonColors(
 //                containerColor = Blue.copy(0.2f),
                 containerColor = Color.White,
@@ -269,7 +289,9 @@ fun SignInScreen() {
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
                 .height(58.dp),
-            onClick = {},
+            onClick = {
+                viewModel.loginWithFacebookOnClick()
+            },
             colors = ButtonDefaults.buttonColors(
 //                containerColor = Blue.copy(0.2f),
                 containerColor = Color.White,
@@ -309,6 +331,10 @@ fun SignInScreen() {
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
+                modifier = Modifier
+                    .clickable {
+                        viewModel.signUpOnClick()
+                    },
                 text = "Sign up",
                 fontSize = 15.sp,
                 color = Blue
