@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,13 +26,15 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,16 +50,11 @@ import com.example.composebasicapp.ui.theme.Gray4
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen() {
-    val email = remember {
-        mutableStateOf("")
-    }
-    val password = remember {
-        mutableStateOf("")
-    }
-    val confirmPassword = remember {
-        mutableStateOf("")
-    }
+fun SignUpScreen(
+    viewModel: SignUpViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
+
+    val uiState by viewModel.uiState.collectAsState()
 
 
     Box(
@@ -108,6 +107,7 @@ fun SignUpScreen() {
         // Content
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -138,9 +138,9 @@ fun SignUpScreen() {
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = email.value,
+                value = uiState.fullName,
                 onValueChange = {
-                    email.value = it
+                    viewModel.onEvent(SignUpEvent.UpdateFullName(it))
                 },
                 placeholder = {
                     Text("Full name")
@@ -162,9 +162,9 @@ fun SignUpScreen() {
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = email.value,
+                value = uiState.email,
                 onValueChange = {
-                    email.value = it
+                    viewModel.onEvent(SignUpEvent.UpdateEmail(it))
                 },
                 placeholder = {
                     Text("abc@gmail.com")
@@ -186,9 +186,9 @@ fun SignUpScreen() {
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = password.value,
+                value = uiState.password,
                 onValueChange = {
-                    password.value = it
+                    viewModel.onEvent(SignUpEvent.UpdatePassword(it))
                 },
                 placeholder = {
                     Text("Your password")
@@ -204,8 +204,15 @@ fun SignUpScreen() {
                     Icon(
                         modifier = Modifier
                             .size(22.dp)
-                            .clickable { },
-                        painter = painterResource(id = R.drawable.visibility_off_icon),
+                            .clickable {
+                                viewModel.onEvent(SignUpEvent.UpdatePasswordVisibility(!uiState.passwordVisibility))
+                            },
+                        painter = painterResource(
+                            if (uiState.passwordVisibility)
+                                R.drawable.baseline_visibility_24
+                            else
+                                R.drawable.visibility_off_icon
+                        ),
                         contentDescription = null,
                     )
                 },
@@ -214,14 +221,19 @@ fun SignUpScreen() {
                     placeholderColor = Gray1,
                     unfocusedLeadingIconColor = Gray2,
                     unfocusedBorderColor = Gray3
-                )
+                ),
+                visualTransformation =
+                    if (uiState.passwordVisibility)
+                        VisualTransformation.None
+                    else
+                        PasswordVisualTransformation()
             )
             Spacer(modifier = Modifier.height(12.dp))
             OutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = confirmPassword.value,
+                value = uiState.confirmPassword,
                 onValueChange = {
-                    confirmPassword.value = it
+                    viewModel.onEvent(SignUpEvent.UpdateConfirmPassword(it))
                 },
                 placeholder = {
                     Text("Confirm password")
@@ -237,8 +249,16 @@ fun SignUpScreen() {
                     Icon(
                         modifier = Modifier
                             .size(22.dp)
-                            .clickable { },
-                        painter = painterResource(id = R.drawable.visibility_off_icon),
+                            .clickable {
+                                viewModel.onEvent(SignUpEvent.UpdatePasswordVisibility(!uiState.passwordVisibility))
+                            },
+                        painter = painterResource(
+                            if (uiState.passwordVisibility)
+                                R.drawable.baseline_visibility_24
+                            else
+                                R.drawable.visibility_off_icon
+
+                        ),
                         contentDescription = null,
                     )
                 },
@@ -247,7 +267,12 @@ fun SignUpScreen() {
                     placeholderColor = Gray1,
                     unfocusedLeadingIconColor = Gray2,
                     unfocusedBorderColor = Gray3
-                )
+                ),
+                visualTransformation =
+                if (uiState.passwordVisibility)
+                    VisualTransformation.None
+                else
+                    PasswordVisualTransformation()
             )
             Spacer(modifier = Modifier.height(12.dp))
             Spacer(modifier = Modifier.height(24.dp))
