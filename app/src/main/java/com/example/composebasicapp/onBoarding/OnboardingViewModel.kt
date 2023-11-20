@@ -10,10 +10,13 @@ class OnboardingViewModel: ViewModel() {
     private val _uiState = MutableStateFlow<OnboardingState>(OnboardingState())
     val uiState = _uiState.asStateFlow()
 
-    fun moveNext() {
+    /**
+     * @return Boolean - true means should navgiate Next
+     */
+    fun moveNext(): Boolean {
         val currentIndex = uiState.value.selectedItem
         if (currentIndex >= uiState.value.items.lastIndex) {
-            return
+            return true
         }
 
         _uiState.update {
@@ -21,5 +24,8 @@ class OnboardingViewModel: ViewModel() {
                 selectedItem = currentIndex + 1
             )
         }
+        return false
     }
+
+
 }

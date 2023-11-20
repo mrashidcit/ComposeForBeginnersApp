@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.composebasicapp.R
+import com.example.composebasicapp.common.Routes
 import com.example.composebasicapp.ui.theme.Black1
 import com.example.composebasicapp.ui.theme.Blue
 import com.example.composebasicapp.ui.theme.ComposeBasicAppTheme
@@ -55,7 +56,8 @@ import com.example.composebasicapp.ui.theme.Gray4
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(
-    viewModel: SignUpViewModel = viewModel()
+    viewModel: SignUpViewModel = viewModel(),
+    navigateNext: (String) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -415,6 +417,10 @@ fun SignUpScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
+                    modifier = Modifier
+                        .clickable {
+                           navigateNext(Routes.signIn)
+                        },
                     text = "Signin",
                     fontSize = 15.sp,
                     color = Blue,
@@ -433,7 +439,9 @@ fun SignUpScreen(
 @Composable
 fun SignUpScreenPreview() {
     ComposeBasicAppTheme {
-        SignUpScreen()
+        SignUpScreen() {
+
+        }
     }
 }
 
