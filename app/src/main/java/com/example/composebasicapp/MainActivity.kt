@@ -37,6 +37,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.composebasicapp.common.Routes
+import com.example.composebasicapp.onBoarding.OnBoardingScreen
+import com.example.composebasicapp.signIn.SignInScreen
+import com.example.composebasicapp.signUp.SignUpScreen
+import com.example.composebasicapp.splash.SplashScreen
 import com.example.composebasicapp.ui.theme.ComposeBasicAppTheme
 import com.example.composebasicapp.ui.theme.Green
 import com.example.composebasicapp.ui.theme.Purple40
@@ -49,9 +57,44 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             ComposeBasicAppTheme {
                 // A surface container using the 'background' color from the theme
-                MainBody()
+//                MainBody()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = Routes.splash) {
+
+                    composable(Routes.splash) {
+                        SplashScreen() { route ->
+                            navController.navigate(route)
+                        }
+                    }
+
+                    composable(Routes.onboarding) {
+                        OnBoardingScreen(){ route ->
+                            navController.navigate(route)
+                        }
+                    }
+
+                    composable(Routes.signIn) {
+                        SignInScreen(){ route ->
+                            navController.navigate(route)
+                        }
+                    }
+
+                    composable(Routes.signUp) {
+                        SignUpScreen(){ route ->
+                            navController.navigate(route)
+                        }
+                    }
+
+
+
+
+                }
+
             }
         }
     }

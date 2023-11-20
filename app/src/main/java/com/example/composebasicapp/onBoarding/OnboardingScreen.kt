@@ -36,13 +36,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composebasicapp.R
+import com.example.composebasicapp.common.Routes
 import com.example.composebasicapp.ui.theme.Blue
 import com.example.composebasicapp.ui.theme.ComposeBasicAppTheme
 
 
 @Composable
 fun OnBoardingScreen(
-    viewModel: OnboardingViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: OnboardingViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    navigateNext: (String) -> Unit,
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
@@ -177,7 +179,9 @@ fun OnBoardingScreen(
                 Text(
                     modifier = Modifier
                         .clickable {
-                          viewModel.moveNext()
+                          val shouldNavigateNext = viewModel.moveNext()
+                            if (shouldNavigateNext)
+                                navigateNext(Routes.signIn)
                         },
                     text = "Next",
                     color = Color.White
@@ -194,7 +198,9 @@ fun OnBoardingScreen(
 @Composable
 fun OnBoardingScreenPreview() {
     ComposeBasicAppTheme {
-        OnBoardingScreen()
+        OnBoardingScreen() {
+
+        }
     }
 }
 
